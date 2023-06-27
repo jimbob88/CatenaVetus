@@ -9,6 +9,13 @@ Input {
     margin: 1 0;
 }
 
+Input.-valid {
+    border: tall $success 60%;
+}
+Input.-valid:focus {
+    border: tall $success;
+}
+
 #results {
     width: 100%;
     height: auto;
@@ -25,4 +32,8 @@ Input {
 
 #results-container:focus {
     border: tall $accent;
+}
+
+#spinner {
+    align: center middle;
 }

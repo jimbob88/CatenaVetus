@@ -185,11 +185,10 @@ def normalize_book_name(abbr_name: str) -> str:
     """i.e. converts john -> John"""
     return alt_to_fullname[abbr_name]
 
-
-def validate_bible_verse():
-    """
-    Credit: https://regex101.com/library/fS3wA0
-    :return:
-    """
-    bible_verse_re = r"((?:[1234]\s?)?[a-zа-я]+)(\s?\d+(?::(?:\d+[—–-]\d+|\d+)(?:,\d+[—–-]\d+|,\d+)*" \
-                     r"(?:;\s?\d+(?::(?:\d+[—–-]\d+|\d+)(?:,\d+[—–-]\d+|,\d+)*|;))*)?)"
+# def validate_bible_verse():
+#     """
+#     Credit: https://regex101.com/library/fS3wA0
+#     :return:
+#     """
+#     bible_verse_re = r"((?:[1234]\s?)?[a-zа-я]+)(\s?\d+(?::(?:\d+[—–-]\d+|\d+)(?:,\d+[—–-]\d+|,\d+)*" \
+#                      r"(?:;\s?\d+(?::(?:\d+[—–-]\d+|\d+)(?:,\d+[—–-]\d+|,\d+)*|;))*)?)"
