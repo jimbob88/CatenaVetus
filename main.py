@@ -1,9 +1,10 @@
 import sqlite3
 
-from textual import work
+from textual import work, on
 from textual.app import App, ComposeResult
 from textual.containers import VerticalScroll
-from textual.widgets import Input, Markdown
+from textual.validation import Function
+from textual.widgets import Input, Markdown, Pretty
 
 from commentaries_to_markdown import commentaries_to_markdown
 from database_api.code_verse import reference
@@ -16,7 +17,13 @@ class CatenaVetus(App):
     CSS_PATH = "main.css"
 
     def compose(self) -> ComposeResult:
-        yield Input(placeholder="Search for a word")
+        yield Input(
+            placeholder="Search for a word",
+            validators=[
+                Function()
+            ]
+        )
+        yield Pretty([])
         with VerticalScroll(id="results-container"):
             yield Markdown(id="results")
 
@@ -36,10 +43,10 @@ class CatenaVetus(App):
 
     @work(exclusive=True)
     async def lookup_verse(self, verse: str) -> None:
-        try:
-            book_name, start_id, end_id = reference(verse)
-        except (KeyError, IndexError, ValueError):
-            return
+        # try:
+        book_name, start_id, end_id = reference(verse)
+        # except (KeyError, IndexError, ValueError):
+        # return
         comms = commentaries(self.connection, book_name, start_id, end_id)
 
         if verse == self.query_one(Input).value:
@@ -48,6 +55,14 @@ class CatenaVetus(App):
             else:
                 markdown = "# No results found!"
             self.query_one("#results", Markdown).update(markdown)
+
+    @on(Input.Changed)
+    def show_invalid_reasons(self, event: Input.Changed) -> None:
+        # Updating the UI to show the reasons why validation failed
+        if not event.validation_result.is_valid:
+            self.query_one(Pretty).update(event.validation_result.failure_descriptions)
+        else:
+            self.query_one(Pretty).update([])
 
 
 if __name__ == '__main__':

@@ -84,8 +84,8 @@ abbr_and_alt = {
 }
 
 # Allows you to reverse Mk -> Mark
-alt_to_database: Dict[str, str] = {
-    alt_name: database_name
+alt_to_fullname: Dict[str, str] = {
+    alt_name.lower(): database_name
     for database_name, alt_names in abbr_and_alt.items()
     for alt_name in alt_names
 }
@@ -147,7 +147,7 @@ def reference(verse: str) -> Tuple[str, int, int]:
         verse += ":1-99999"
 
     book_name = " ".join(verse.split(' ')[:-1])
-    db_name = alt_to_database[book_name].lower().replace(' ', '')
+    db_name = alt_to_fullname[book_name.lower()].lower().replace(' ', '')
 
     chap_v = verse.split(' ')[-1]
     verse_range = string_to_verse_range(chap_v)
@@ -155,3 +155,41 @@ def reference(verse: str) -> Tuple[str, int, int]:
     start_verse = encode_chapter_verse(verse_range.start_chapter, verse_range.start_verse)
     end_verse = encode_chapter_verse(verse_range.end_chapter, verse_range.end_verse)
     return db_name, start_verse, end_verse
+
+
+def decode_chapter_verse(chap_verse: int) -> Tuple[int, int]:
+    chapter = int(str(chap_verse)[:-6])
+    verse = int(str(chap_verse)[-6:])
+    return chapter, verse
+
+
+def verse_range_to_str(start_chap: int, start_verse: int, end_chap: int, end_verse: int) -> str:
+    """Takes for example 1:2 to 3:4 and returns 1:2-3:4. Or 1:1 to 1:2 and returns 1:1-2 [A normative function]"""
+    if start_chap == end_chap:
+        if start_verse == end_verse:
+            return f"{start_chap}:{start_verse}"
+        else:
+            return f"{start_chap}:{start_verse}-{end_verse}"
+    else:
+        return f"{start_chap}:{start_verse}-{end_chap}:{end_verse}"
+
+
+def verse_id_range_to_str(start_id: int, end_id: int) -> str:
+    """Takes something like 13000001 to 13000002 and returns 13:1-2 [A normative function]"""
+    start_chap, start_verse = decode_chapter_verse(start_id)
+    end_chap, end_verse = decode_chapter_verse(end_id)
+    return verse_range_to_str(start_chap, start_verse, end_chap, end_verse)
+
+
+def normalize_book_name(abbr_name: str) -> str:
+    """i.e. converts john -> John"""
+    return alt_to_fullname[abbr_name]
+
+
+def validate_bible_verse():
+    """
+    Credit: https://regex101.com/library/fS3wA0
+    :return:
+    """
+    bible_verse_re = r"((?:[1234]\s?)?[a-zа-я]+)(\s?\d+(?::(?:\d+[—–-]\d+|\d+)(?:,\d+[—–-]\d+|,\d+)*" \
+                     r"(?:;\s?\d+(?::(?:\d+[—–-]\d+|\d+)(?:,\d+[—–-]\d+|,\d+)*|;))*)?)"
