@@ -140,6 +140,12 @@ def reference(verse: str) -> Tuple[str, int, int]:
     :param verse: i.e. John 1:13 or John 1:13-14 or 1 Jn 1:4-2:1
     :return: book name, start id, end id
     """
+
+    verse = verse.strip()
+    # if selecting a whole chapter
+    if ":" not in verse:
+        verse += ":1-99999"
+
     book_name = " ".join(verse.split(' ')[:-1])
     db_name = alt_to_database[book_name].lower().replace(' ', '')
 
