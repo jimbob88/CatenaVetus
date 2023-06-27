@@ -1,10 +1,9 @@
 import sqlite3
 
-from textual import work, on
+from textual import work
 from textual.app import App, ComposeResult
 from textual.containers import VerticalScroll
-from textual.validation import Function
-from textual.widgets import Input, Markdown, Pretty, Header
+from textual.widgets import Input, Markdown, Header
 
 from commentaries_to_markdown import commentaries_to_markdown
 from database_api.code_verse import reference
@@ -50,10 +49,7 @@ class CatenaVetus(App):
         comms = commentaries(self.connection, book_name, start_id, end_id)
 
         if verse == self.query_one(Input).value:
-            if comms:
-                markdown = commentaries_to_markdown(comms)
-            else:
-                markdown = "# No results found!"
+            markdown = commentaries_to_markdown(comms) if comms else "# No results found!"
             self.call_from_thread(self.query_one("#results", Markdown).update, markdown)
         self.query_one("#spinner").visible = False
 

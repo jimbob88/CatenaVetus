@@ -165,13 +165,13 @@ def decode_chapter_verse(chap_verse: int) -> Tuple[int, int]:
 
 def verse_range_to_str(start_chap: int, start_verse: int, end_chap: int, end_verse: int) -> str:
     """Takes for example 1:2 to 3:4 and returns 1:2-3:4. Or 1:1 to 1:2 and returns 1:1-2 [A normative function]"""
-    if start_chap == end_chap:
-        if start_verse == end_verse:
-            return f"{start_chap}:{start_verse}"
-        else:
-            return f"{start_chap}:{start_verse}-{end_verse}"
-    else:
+    if start_chap != end_chap:
         return f"{start_chap}:{start_verse}-{end_chap}:{end_verse}"
+    
+    if start_verse == end_verse:
+        return f"{start_chap}:{start_verse}"
+    else:
+        return f"{start_chap}:{start_verse}-{end_verse}"
 
 
 def verse_id_range_to_str(start_id: int, end_id: int) -> str:
