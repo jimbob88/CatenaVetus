@@ -43,7 +43,7 @@ class CatenaVetus(App):
 
     # async needs to be removed from this function, but currently that is not working in textual
     @work(exclusive=True)
-    async def lookup_verse(self, verse: str) -> None:
+    def lookup_verse(self, verse: str) -> None:
         self.query_one("#spinner").visible = True
         self.refresh()
         book_name, start_id, end_id = reference(verse)
@@ -54,7 +54,7 @@ class CatenaVetus(App):
                 markdown = commentaries_to_markdown(comms)
             else:
                 markdown = "# No results found!"
-            self.query_one("#results", Markdown).update(markdown)
+            self.call_from_thread(self.query_one("#results", Markdown).update, markdown)
         self.query_one("#spinner").visible = False
 
 
