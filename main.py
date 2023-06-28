@@ -3,7 +3,6 @@ import webbrowser
 
 from textual import work, on
 from textual.app import App, ComposeResult
-from textual.containers import VerticalScroll
 from textual.widgets import Input, Header, Footer
 
 from commentaries_to_markdown import commentaries_to_markdown
@@ -87,6 +86,10 @@ class CatenaVetus(App):
     def action_toggle_toc(self) -> None:
         mkdown_viewer = self.query_one("#results", SpeedyMarkdownViewer)
         mkdown_viewer.show_table_of_contents = not mkdown_viewer.show_table_of_contents
+        if mkdown_viewer.show_table_of_contents:
+            mkdown_viewer.table_of_contents.focus()
+        else:
+            mkdown_viewer.document.focus()
         self.refresh()
 
 

@@ -21,6 +21,7 @@ Input.-valid:focus {
     height: 100%;
 }
 
+/*
 #results-container {
     background: $background 50%;
     margin: 0 0 1 0;
@@ -30,6 +31,11 @@ Input.-valid:focus {
 }
 
 #results-container:focus {
+    border: tall $accent;
+}
+*/
+
+#results:focus {
     border: tall $accent;
 }
 
