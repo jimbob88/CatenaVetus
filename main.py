@@ -32,7 +32,7 @@ class CatenaVetus(App):
         """Called when app starts."""
 
         # see: https://ricardoanderegg.com/posts/python-sqlite-thread-safety/
-        self.connection = sqlite3.connect("test.db", check_same_thread=False)
+        self.connection = sqlite3.connect("commentaries.db", check_same_thread=False)
         # Give the input focus, so we can start typing straight away
         self.query_one(Input).focus()
         self.query_one("#spinner").visible = False
