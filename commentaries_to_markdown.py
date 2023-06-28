@@ -23,5 +23,5 @@ def commentaries_to_markdown(commentaries: List[Commentary]) -> str:
 
         title += f" on {normalize_book_name(commentary.book)} {verse_id_range_to_str(commentary.location_start, commentary.location_end)}"
 
-        mkdown.extend((title, commentary.txt, "\n\n ---"))
+        mkdown.extend((title, commentary.txt, f"`{commentary.source_title}`" if commentary.source_title else "", "\n\n ---"))
     return "\n".join(mkdown)
