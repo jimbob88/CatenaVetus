@@ -6,7 +6,7 @@ import re
 from typing import NamedTuple, Tuple
 
 from database_api.abbreviations import alt_to_fullname
-from database_api.errors import BookNotFoundError
+from database_api.errors import BookNotFoundError, ReferenceStyleNotRecognisedError
 
 
 class VerseRange(NamedTuple):
@@ -58,8 +58,10 @@ def reference(verse: str) -> Tuple[str, int, int]:
     :param verse: i.e. John 1:13 or John 1:13-14 or 1 Jn 1:4-2:1
     :return: book name, start id, end id
     """
-
     verse = verse.strip()
+    if not validate_bible_verse(verse):
+        raise ReferenceStyleNotRecognisedError(f"{verse} did not conform to standard reference style BookName ChapNum[:VerseNum][-ChapNum:VerseNum]")
+
     # if selecting a whole chapter
     if ":" not in verse:
         verse += ":1-99999"
@@ -107,10 +109,11 @@ def normalize_book_name(abbr_name: str) -> str:
     """i.e. converts john -> John"""
     return alt_to_fullname[abbr_name]
 
-# def validate_bible_verse():
-#     """
-#     Credit: https://regex101.com/library/fS3wA0
-#     :return:
-#     """
-#     bible_verse_re = r"((?:[1234]\s?)?[a-zа-я]+)(\s?\d+(?::(?:\d+[—–-]\d+|\d+)(?:,\d+[—–-]\d+|,\d+)*" \
-#                      r"(?:;\s?\d+(?::(?:\d+[—–-]\d+|\d+)(?:,\d+[—–-]\d+|,\d+)*|;))*)?)"
+
+def validate_bible_verse(verse: str):
+    """
+    Credit: https://regex101.com/library/fS3wA0 https://regex101.com/library/wX7nO0
+    :return:
+    """
+    bible_verse_re = r"(.*?)\s(\d{1,2})(?::(\d{1,2})(?:-(\d{1,2})?)?)?"
+    return re.match(bible_verse_re, verse)

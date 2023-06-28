@@ -1,7 +1,26 @@
 import unittest
 
-from database_api.code_verse import reference
-from database_api.errors import BookNotFoundError
+from database_api.code_verse import reference, validate_bible_verse
+from database_api.errors import BookNotFoundError, ReferenceStyleNotRecognisedError
+
+
+class ReferenceValidityTest(unittest.TestCase):
+    def test_correct_references(self):
+        self.assertTrue(validate_bible_verse("John 3"))
+        self.assertTrue(validate_bible_verse("John 3:16"))
+        self.assertTrue(validate_bible_verse("Genesis 1:1"))
+        self.assertTrue(validate_bible_verse("1 Samuel 1:12"))
+        self.assertTrue(validate_bible_verse("1 Kgs 1:3"))
+        self.assertTrue(validate_bible_verse("1 Cor 1:1"))
+
+    def test_invalid_references(self):
+        self.assertFalse(validate_bible_verse("John"))
+        self.assertFalse(validate_bible_verse("1 Samuel "))
+        self.assertFalse(validate_bible_verse("1 Samuel:"))
+        self.assertFalse(validate_bible_verse("1 Samuel1:1"))
+
+    def test_grammatically_correct_references(self):
+        self.assertTrue(validate_bible_verse("Super Secret Book Name Gnostics Probably Believe 3:1"))
 
 
 class ReferenceTest(unittest.TestCase):
@@ -41,6 +60,11 @@ class ReferenceTest(unittest.TestCase):
     def test_with_grammatically_correct(self):
         # Despite these not being in the bible, the logic still work the same
         self.assertEqual(("mark", 900000009321, 900000009321), reference("Mark 900000:9321"))
+
+    def test_with_grammatically_incorrect(self):
+        self.assertRaises(ReferenceStyleNotRecognisedError, reference, "Mark")
+        self.assertRaises(ReferenceStyleNotRecognisedError, reference, "jon")
+        self.assertRaises(ReferenceStyleNotRecognisedError, reference, "John3:16")
 
 
 if __name__ == '__main__':

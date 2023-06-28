@@ -4,3 +4,7 @@ class GenericReferencePassingError(Exception):
 
 class BookNotFoundError(GenericReferencePassingError):
     """Raised when the given book was not found"""
+
+
+class ReferenceStyleNotRecognisedError(GenericReferencePassingError):
+    """Raised when the reference does not match the regex style"""
