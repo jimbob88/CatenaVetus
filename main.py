@@ -1,6 +1,7 @@
 import sqlite3
+import webbrowser
 
-from textual import work
+from textual import work, on
 from textual.app import App, ComposeResult
 from textual.containers import VerticalScroll
 from textual.widgets import Input, Header
@@ -71,6 +72,10 @@ class CatenaVetus(App):
         markdown_widget = self.query_one("#results", SpeedyMarkdown)
         output = markdown_widget.generate_markdown_objs(markdown_txt)
         self.call_from_thread(markdown_widget.mnt, output)
+
+    @on(SpeedyMarkdown.LinkClicked)
+    def link_clicked(self, event: SpeedyMarkdown.LinkClicked):
+        webbrowser.open(event.href)
 
 
 if __name__ == '__main__':
