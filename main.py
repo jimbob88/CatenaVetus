@@ -4,10 +4,10 @@ import webbrowser
 from textual import work, on
 from textual.app import App, ComposeResult
 from textual.containers import VerticalScroll
-from textual.widgets import Input, Header
+from textual.widgets import Input, Header, Footer
 
 from commentaries_to_markdown import commentaries_to_markdown
-from custom_markdown import SpeedyMarkdown
+from custom_markdown import SpeedyMarkdown, SpeedyMarkdownViewer
 from database_api.code_verse import reference
 from database_api.errors import GenericReferencePassingError, BookNotFoundError, ReferenceStyleNotRecognisedError
 from database_api.sql import commentaries
@@ -18,13 +18,16 @@ class CatenaVetus(App):
     """View what the Church Fathers wrote about a verse"""
 
     CSS_PATH = "main.css"
+    BINDINGS = [("d", "toggle_dark", "Toggle dark mode"), ("t", "toggle_toc", "Toggle Table of Contents")]
 
     def compose(self) -> ComposeResult:
         yield Header()
         yield Input(placeholder="Search for a verse")
-        with VerticalScroll(id="results-container"):
-            yield SpinnerWidget(id="spinner")
-            yield SpeedyMarkdown(id="results")
+
+        # with VerticalScroll(id="results-container"):
+        yield SpinnerWidget(id="spinner")
+        yield SpeedyMarkdownViewer(id="results", show_table_of_contents=False)
+        yield Footer()
 
     def on_mount(self) -> None:
         """Called when app starts."""
@@ -41,7 +44,7 @@ class CatenaVetus(App):
             self.lookup_verse(message.value)
         else:
             # Clear the results
-            self.query_one("#results", SpeedyMarkdown).update("")
+            self.query_one("#results", SpeedyMarkdownViewer).document.update("")
 
     # async needs to be removed from this function, but currently that is not working in textual
     @work(exclusive=True)
@@ -69,13 +72,22 @@ class CatenaVetus(App):
         self.query_one("#spinner").visible = False
 
     def threaded_update_markdown(self, markdown_txt: str):
-        markdown_widget = self.query_one("#results", SpeedyMarkdown)
+        markdown_widget = self.query_one("#results", SpeedyMarkdownViewer).document
         output = markdown_widget.generate_markdown_objs(markdown_txt)
         self.call_from_thread(markdown_widget.mnt, output)
 
     @on(SpeedyMarkdown.LinkClicked)
     def link_clicked(self, event: SpeedyMarkdown.LinkClicked):
         webbrowser.open(event.href)
+
+    def action_toggle_dark(self) -> None:
+        """An action to toggle dark mode."""
+        self.dark = not self.dark
+
+    def action_toggle_toc(self) -> None:
+        mkdown_viewer = self.query_one("#results", SpeedyMarkdownViewer)
+        mkdown_viewer.show_table_of_contents = not mkdown_viewer.show_table_of_contents
+        self.refresh()
 
 
 if __name__ == '__main__':

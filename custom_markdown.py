@@ -1,10 +1,11 @@
 from markdown_it import MarkdownIt
 from rich.style import Style
 from rich.text import Text
+from textual.app import ComposeResult
 from textual.widgets import Markdown
 from textual.widgets._markdown import MarkdownBlock, TableOfContentsType, HEADINGS, MarkdownHorizontalRule, MarkdownParagraph, MarkdownBlockQuote, \
     MarkdownBulletList, MarkdownOrderedList, MarkdownOrderedListItem, MarkdownUnorderedListItem, MarkdownTable, MarkdownTBody, MarkdownTHead, \
-    MarkdownTR, MarkdownTH, MarkdownTD, MarkdownFence
+    MarkdownTR, MarkdownTH, MarkdownTD, MarkdownFence, MarkdownViewer, MarkdownTableOfContents
 
 
 class SpeedyMarkdown(Markdown):
@@ -162,3 +163,15 @@ class SpeedyMarkdown(Markdown):
         with self.app.batch_update():
             self.query("MarkdownBlock").remove()
             self.mount_all(output)
+
+
+class SpeedyMarkdownViewer(MarkdownViewer):
+    @property
+    def document(self) -> SpeedyMarkdown:
+        """The SpeedyMarkdown document object."""
+        return self.query_one(SpeedyMarkdown)
+
+    def compose(self) -> ComposeResult:
+        markdown = SpeedyMarkdown(parser_factory=self._parser_factory)
+        yield MarkdownTableOfContents(markdown)
+        yield markdown
