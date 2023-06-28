@@ -68,7 +68,7 @@ def reference(verse: str) -> Tuple[str, int, int]:
 
     book_name = " ".join(verse.split(' ')[:-1])
     if book_name.lower() not in alt_to_fullname:
-        raise BookNotFoundError(f"Book shortening `{book_name}` not found, please check `abbreviations.py` for available names.")
+        raise BookNotFoundError(f"Book `{book_name}` not found, please check `abbreviations.py` for available names.")
     db_name = alt_to_fullname[book_name.lower()].lower().replace(' ', '')
 
     chap_v = verse.split(' ')[-1]

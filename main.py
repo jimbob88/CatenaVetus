@@ -8,6 +8,7 @@ from textual.widgets import Input, Header
 from commentaries_to_markdown import commentaries_to_markdown
 from custom_markdown import SpeedyMarkdown
 from database_api.code_verse import reference
+from database_api.errors import GenericReferencePassingError, BookNotFoundError, ReferenceStyleNotRecognisedError
 from database_api.sql import commentaries
 from spinner import SpinnerWidget
 
@@ -46,15 +47,30 @@ class CatenaVetus(App):
     def lookup_verse(self, verse: str) -> None:
         self.query_one("#spinner").visible = True
         self.refresh()
-        book_name, start_id, end_id = reference(verse)
+
+        try:
+            book_name, start_id, end_id = reference(verse)
+        except GenericReferencePassingError as e:
+            if isinstance(e, BookNotFoundError):
+                self.threaded_update_markdown(f"# Error: could not find book in `{verse}`: {e}")
+            elif isinstance(e, ReferenceStyleNotRecognisedError):
+                self.threaded_update_markdown(f"# Error: Reference style `{verse}` not understood: {e}")
+            else:
+                raise e
+            self.query_one("#spinner").visible = False
+            return
         comms = commentaries(self.connection, book_name, start_id, end_id)
 
         if verse == self.query_one(Input).value:
             markdown_txt = commentaries_to_markdown(comms) if comms else "# No results found!"
-            markdown_widget = self.query_one("#results", SpeedyMarkdown)
-            output = markdown_widget.generate_markdown_objs(markdown_txt)
-            self.call_from_thread(markdown_widget.mnt, output)
+            self.threaded_update_markdown(markdown_txt)
+
         self.query_one("#spinner").visible = False
+
+    def threaded_update_markdown(self, markdown_txt: str):
+        markdown_widget = self.query_one("#results", SpeedyMarkdown)
+        output = markdown_widget.generate_markdown_objs(markdown_txt)
+        self.call_from_thread(markdown_widget.mnt, output)
 
 
 if __name__ == '__main__':
