@@ -3,9 +3,10 @@ import sqlite3
 from textual import work
 from textual.app import App, ComposeResult
 from textual.containers import VerticalScroll
-from textual.widgets import Input, Markdown, Header
+from textual.widgets import Input, Header
 
 from commentaries_to_markdown import commentaries_to_markdown
+from custom_markdown import SpeedyMarkdown
 from database_api.code_verse import reference
 from database_api.sql import commentaries
 from spinner import SpinnerWidget
@@ -21,7 +22,7 @@ class CatenaVetus(App):
         yield Input(placeholder="Search for a verse")
         with VerticalScroll(id="results-container"):
             yield SpinnerWidget(id="spinner")
-            yield Markdown(id="results")
+            yield SpeedyMarkdown(id="results")
 
     def on_mount(self) -> None:
         """Called when app starts."""
@@ -38,7 +39,7 @@ class CatenaVetus(App):
             self.lookup_verse(message.value)
         else:
             # Clear the results
-            self.query_one("#results", Markdown).update("")
+            self.query_one("#results", SpeedyMarkdown).update("")
 
     # async needs to be removed from this function, but currently that is not working in textual
     @work(exclusive=True)
@@ -49,8 +50,10 @@ class CatenaVetus(App):
         comms = commentaries(self.connection, book_name, start_id, end_id)
 
         if verse == self.query_one(Input).value:
-            markdown = commentaries_to_markdown(comms) if comms else "# No results found!"
-            self.call_from_thread(self.query_one("#results", Markdown).update, markdown)
+            markdown_txt = commentaries_to_markdown(comms) if comms else "# No results found!"
+            markdown_widget = self.query_one("#results", SpeedyMarkdown)
+            output = markdown_widget.generate_markdown_objs(markdown_txt)
+            self.call_from_thread(markdown_widget.mnt, output)
         self.query_one("#spinner").visible = False
 
 
