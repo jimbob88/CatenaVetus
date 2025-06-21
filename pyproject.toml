@@ -10,7 +10,7 @@ authors = [
 ]
 keywords = ["catholic", "religion", "christianity", "tui"]
 readme = "README.md"
-license = "BSD-2-Clause"
+license = "Unlicense"
 dynamic = ["version"]
 dependencies = [
   "textual>=0.28.1"
