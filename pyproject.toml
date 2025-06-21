@@ -1,6 +1,7 @@
 [build-system]
-requires = ["hatchling >= 1.27"]
-build-backend = "hatchling.build"
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 
 [project]
 name = "catena_vetus"
@@ -15,11 +16,19 @@ dynamic = ["version"]
 dependencies = [
   "textual>=3.5.0"
 ]
-
-[tool.hatch.version]
-path = "catena_vetus/__about__.py"
+requires-python = ">=3.9"
+version = "2.0.0a1"
 
 [project.optional-dependencies]
 dev = [
   "pytest"
 ]
+
+[tool.poetry-pyinstaller-plugin.scripts]
+catena-vetus = { source = "catena_vetus/__main__.py", type = "onedir", bundle = false, hiddenimport = ["textual.widgets._markdown_viewer"] }
+
+[tool.poetry-pyinstaller-plugin.package]
+"README.md" = "."
+
+[tool.poetry-pyinstaller-plugin.include]
+"catena_vetus/main.css" = "."

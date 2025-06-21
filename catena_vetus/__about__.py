@@ -1,1 +1,3 @@
-__version__ = "2.0.0a0"
+import importlib.metadata
+
+__version__ = importlib.metadata.version("catena_vetus")
