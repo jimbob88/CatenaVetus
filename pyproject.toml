@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling >= 1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "catena_vetus"
+description = "A TUI for reading the Church Fathers"
+authors = [
+  {name = "James Blackburn", email = "blackburnfjames@gmail.com"}
+]
+keywords = ["catholic", "religion", "christianity", "tui"]
+readme = "README.md"
+license = "BSD-2-Clause"
+dynamic = ["version"]
+dependencies = [
+  "textual>=0.28.1"
+]
+
+[tool.hatch.version]
+path = "catena_vetus/__about__.py"
