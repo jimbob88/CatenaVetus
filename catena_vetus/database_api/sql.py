@@ -2,7 +2,7 @@
 import sqlite3
 from typing import List
 
-from database_api.commentary_objects import Commentary
+from catena_vetus.database_api.commentary_objects import Commentary
 
 sql_function = """SELECT c.*,fm.wiki_url FROM commentary c LEFT JOIN father_meta fm ON c.father_name=fm.name 
 WHERE c.book=(?) and 
