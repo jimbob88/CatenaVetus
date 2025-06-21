@@ -51,12 +51,6 @@ def commentary_to_markdown(
 
 
 def commentaries_to_markdown(commentaries: List[Commentary]) -> str:
-    mkdown = []
-    for commentary in commentaries:
-        mkdown.extend(
-            (
-                commentary_to_markdown(commentary),
-                "\n\n ---",
-            )
-        )
-    return "\n".join(mkdown)
+    return "\n\n ---\n".join(
+        commentary_to_markdown(commentary) for commentary in commentaries
+    )
