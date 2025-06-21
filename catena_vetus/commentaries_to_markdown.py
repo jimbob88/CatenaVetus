@@ -1,7 +1,7 @@
 from typing import List
 
-from database_api.code_verse import verse_id_range_to_str, normalize_book_name
-from database_api.commentary_objects import Commentary
+from catena_vetus.database_api.code_verse import verse_id_range_to_str, normalize_book_name
+from catena_vetus.database_api.commentary_objects import Commentary
 
 
 def commentaries_to_markdown(commentaries: List[Commentary]) -> str:

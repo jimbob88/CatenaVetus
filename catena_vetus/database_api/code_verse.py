@@ -5,8 +5,8 @@ Code for encoding/decoding references.
 import re
 from typing import NamedTuple, Tuple
 
-from database_api.abbreviations import alt_to_fullname
-from database_api.errors import BookNotFoundError, ReferenceStyleNotRecognisedError
+from catena_vetus.database_api.abbreviations import alt_to_fullname
+from catena_vetus.database_api.errors import BookNotFoundError, ReferenceStyleNotRecognisedError
 
 
 class VerseRange(NamedTuple):

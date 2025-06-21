@@ -1,3 +1,4 @@
+from pathlib import Path
 import sqlite3
 import webbrowser
 
@@ -5,19 +6,26 @@ from textual import work, on
 from textual.app import App, ComposeResult
 from textual.widgets import Input, Header, Footer
 
-from commentaries_to_markdown import commentaries_to_markdown
-from custom_markdown import SpeedyMarkdown, SpeedyMarkdownViewer
-from database_api.code_verse import reference
-from database_api.errors import GenericReferencePassingError, BookNotFoundError, ReferenceStyleNotRecognisedError
-from database_api.sql import commentaries
-from spinner import SpinnerWidget
+from catena_vetus.commentaries_to_markdown import commentaries_to_markdown
+from catena_vetus.custom_markdown import SpeedyMarkdown, SpeedyMarkdownViewer
+from catena_vetus.database_api.code_verse import reference
+from catena_vetus.database_api.errors import (
+    GenericReferencePassingError,
+    BookNotFoundError,
+    ReferenceStyleNotRecognisedError,
+)
+from catena_vetus.database_api.sql import commentaries
+from catena_vetus.spinner import SpinnerWidget
 
 
 class CatenaVetus(App):
     """View what the Church Fathers wrote about a verse"""
 
     CSS_PATH = "main.css"
-    BINDINGS = [("d", "toggle_dark", "Toggle dark mode"), ("t", "toggle_toc", "Toggle Table of Contents")]
+    BINDINGS = [
+        ("d", "toggle_dark", "Toggle dark mode"),
+        ("t", "toggle_toc", "Toggle Table of Contents"),
+    ]
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -30,6 +38,9 @@ class CatenaVetus(App):
 
     def on_mount(self) -> None:
         """Called when app starts."""
+
+        if not Path("commentaries.db").exists():
+            raise FileNotFoundError("Could not find commentaries.db")
 
         # see: https://ricardoanderegg.com/posts/python-sqlite-thread-safety/
         self.connection = sqlite3.connect("commentaries.db", check_same_thread=False)
@@ -55,9 +66,13 @@ class CatenaVetus(App):
             book_name, start_id, end_id = reference(verse)
         except GenericReferencePassingError as e:
             if isinstance(e, BookNotFoundError):
-                self.threaded_update_markdown(f"# Error: could not find book in `{verse}`: {e}")
+                self.threaded_update_markdown(
+                    f"# Error: could not find book in `{verse}`: {e}"
+                )
             elif isinstance(e, ReferenceStyleNotRecognisedError):
-                self.threaded_update_markdown(f"# Error: Reference style `{verse}` not understood: {e}")
+                self.threaded_update_markdown(
+                    f"# Error: Reference style `{verse}` not understood: {e}"
+                )
             else:
                 raise e
             self.query_one("#spinner").visible = False
@@ -65,7 +80,9 @@ class CatenaVetus(App):
         comms = commentaries(self.connection, book_name, start_id, end_id)
 
         if verse == self.query_one(Input).value:
-            markdown_txt = commentaries_to_markdown(comms) if comms else "# No results found!"
+            markdown_txt = (
+                commentaries_to_markdown(comms) if comms else "# No results found!"
+            )
             self.threaded_update_markdown(markdown_txt)
 
         self.query_one("#spinner").visible = False
@@ -93,6 +110,6 @@ class CatenaVetus(App):
         self.refresh()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = CatenaVetus()
     app.run()

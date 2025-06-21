@@ -3,9 +3,27 @@ from rich.style import Style
 from rich.text import Text
 from textual.app import ComposeResult
 from textual.widgets import Markdown
-from textual.widgets._markdown import MarkdownBlock, TableOfContentsType, HEADINGS, MarkdownHorizontalRule, MarkdownParagraph, MarkdownBlockQuote, \
-    MarkdownBulletList, MarkdownOrderedList, MarkdownOrderedListItem, MarkdownUnorderedListItem, MarkdownTable, MarkdownTBody, MarkdownTHead, \
-    MarkdownTR, MarkdownTH, MarkdownTD, MarkdownFence, MarkdownViewer, MarkdownTableOfContents
+from textual.widgets._markdown import (
+    MarkdownBlock,
+    TableOfContentsType,
+    HEADINGS,
+    MarkdownHorizontalRule,
+    MarkdownParagraph,
+    MarkdownBlockQuote,
+    MarkdownBulletList,
+    MarkdownOrderedList,
+    MarkdownOrderedListItem,
+    MarkdownUnorderedListItem,
+    MarkdownTable,
+    MarkdownTBody,
+    MarkdownTHead,
+    MarkdownTR,
+    MarkdownTH,
+    MarkdownTD,
+    MarkdownFence,
+    MarkdownViewer,
+    MarkdownTableOfContents,
+)
 
 
 class SpeedyMarkdown(Markdown):
@@ -49,8 +67,7 @@ class SpeedyMarkdown(Markdown):
                     stack.append(MarkdownOrderedListItem(self, token.info))
                 else:
                     item_count = sum(
-                        isinstance(block, MarkdownUnorderedListItem)
-                        for block in stack
+                        isinstance(block, MarkdownUnorderedListItem) for block in stack
                     )
                     stack.append(
                         MarkdownUnorderedListItem(
