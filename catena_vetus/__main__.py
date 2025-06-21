@@ -1,10 +1,9 @@
 from pathlib import Path
 import sqlite3
-import webbrowser
 
-from textual import work, on
+from textual import work
 from textual.app import App, ComposeResult
-from textual.widgets import Input, Header, Footer, Markdown, MarkdownViewer
+from textual.widgets import Input, Header, Footer, MarkdownViewer
 
 from catena_vetus.commentaries_to_markdown import commentaries_to_markdown
 from catena_vetus.database_api.code_verse import reference
@@ -14,7 +13,7 @@ from catena_vetus.database_api.errors import (
     ReferenceStyleNotRecognisedError,
 )
 from catena_vetus.database_api.sql import commentaries
-from catena_vetus.spinner import SpinnerWidget
+from catena_vetus.linkable_markdown_viewer import LinkableMarkdownViewer
 
 
 class CatenaVetus(App):
@@ -28,10 +27,9 @@ class CatenaVetus(App):
     def compose(self) -> ComposeResult:
         yield Header()
         yield Input(placeholder="Search for a verse")
-
-        # with VerticalScroll(id="results-container"):
-        yield SpinnerWidget(id="spinner")
-        yield MarkdownViewer(id="results", show_table_of_contents=False)
+        yield LinkableMarkdownViewer(
+            id="results", show_table_of_contents=False, open_links=False
+        )
         yield Footer()
 
     def on_mount(self) -> None:
@@ -44,7 +42,6 @@ class CatenaVetus(App):
         self.connection = sqlite3.connect("commentaries.db", check_same_thread=False)
         # Give the input focus, so we can start typing straight away
         self.query_one(Input).focus()
-        self.query_one("#spinner").visible = False
 
     async def on_input_submitted(self, message: Input.Changed) -> None:
         """A coroutine to handle a text changed message."""
@@ -57,9 +54,6 @@ class CatenaVetus(App):
 
     @work(exclusive=True)
     async def lookup_verse(self, verse: str) -> None:
-        self.query_one("#spinner").visible = True
-        self.refresh()
-
         try:
             book_name, start_id, end_id = reference(verse)
         except GenericReferencePassingError as e:
@@ -71,7 +65,6 @@ class CatenaVetus(App):
                 )
             else:
                 raise e
-            self.query_one("#spinner").visible = False
             return
         comms = commentaries(self.connection, book_name, start_id, end_id)
 
@@ -81,15 +74,9 @@ class CatenaVetus(App):
             )
             self.update_markdown(markdown_txt)
 
-        self.query_one("#spinner").visible = False
-
     def update_markdown(self, markdown_txt: str):
         markdown_widget = self.query_one("#results", MarkdownViewer).document
         markdown_widget.update(markdown_txt)
-
-    @on(Markdown.LinkClicked)
-    def link_clicked(self, event: Markdown.LinkClicked):
-        webbrowser.open(event.href)
 
     def action_toggle_toc(self) -> None:
         mkdown_viewer = self.query_one("#results", MarkdownViewer)
