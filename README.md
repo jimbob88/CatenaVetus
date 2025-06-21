@@ -48,6 +48,15 @@ use [Windows Terminal](https://github.com/microsoft/terminal) because it will wo
 
 #### Developers
 
+##### Running the tests
+
+You can run the unit tests using the following commands.
+
+```shell
+pip install -e '.[dev]'
+pytest
+```
+
 If you want to compile your own binary, you can use `pyinstaller`.
 
 On Windows:
@@ -59,5 +68,5 @@ On Windows:
 On Linux:
 
 ```commandline
-$ pyinstaller --clean --onefile --add-data "main.css:." .\main.py
+pyinstaller --clean --onefile --add-data "main.css:." .\main.py
 ```

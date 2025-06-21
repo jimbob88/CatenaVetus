@@ -18,3 +18,8 @@ dependencies = [
 
 [tool.hatch.version]
 path = "catena_vetus/__about__.py"
+
+[project.optional-dependencies]
+dev = [
+  "pytest"
+]
