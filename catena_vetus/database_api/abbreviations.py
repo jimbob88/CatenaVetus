@@ -75,7 +75,7 @@ abbr_and_alt = {
     "2 John": ["2 John", "2 Jn", "II Jn", "II John"],
     "3 John": ["3 John", "3 Jn", "III Jn", "III John"],
     "Jude": ["Jude"],
-    "Revelation": ["Rev", "Apocalypse", "Apoc"]
+    "Revelation": ["Rev", "Apocalypse", "Apoc"],
 }
 
 # Allows you to reverse Mk -> Mark
@@ -84,6 +84,6 @@ alt_to_fullname: Dict[str, str] = {
     for database_name, alt_names in abbr_and_alt.items()
     for alt_name in alt_names
 }
-alt_to_fullname.update({
-    database_name.lower(): database_name for database_name in abbr_and_alt.keys()
-})
+alt_to_fullname.update(
+    {database_name.lower(): database_name for database_name in abbr_and_alt.keys()}
+)

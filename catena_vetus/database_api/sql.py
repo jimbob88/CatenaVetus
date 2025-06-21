@@ -4,14 +4,16 @@ from typing import List
 
 from catena_vetus.database_api.commentary_objects import Commentary
 
-sql_function = """SELECT c.*,fm.wiki_url FROM commentary c LEFT JOIN father_meta fm ON c.father_name=fm.name 
-WHERE c.book=(?) and 
-c.location_end >= (?) and 
-c.location_start <= (?) 
+sql_function = """SELECT c.*,fm.wiki_url FROM commentary c LEFT JOIN father_meta fm ON c.father_name=fm.name
+WHERE c.book=(?) and
+c.location_end >= (?) and
+c.location_start <= (?)
 ORDER BY c.ts ASC, c.location_start ASC;"""
 
 
-def commentaries(sql_conn: sqlite3.Connection, book_name: str, start_id: int, end_id: int) -> List[Commentary]:
+def commentaries(
+    sql_conn: sqlite3.Connection, book_name: str, start_id: int, end_id: int
+) -> List[Commentary]:
     """
     The following SQL is taken directly from Historical Christian Faith:
     SELECT c.*,fm.wiki_url FROM commentary c LEFT JOIN father_meta fm ON c.father_name=fm.name
