@@ -25,6 +25,10 @@ dev = [
   "flake8"
 ]
 
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.3.0"
+pytest = "^8.4.1"
+
 [tool.poetry-pyinstaller-plugin.scripts]
 catena-vetus = { source = "catena_vetus/__main__.py", type = "onefile", bundle = false, hiddenimport = ["textual.widgets._markdown_viewer"] }
 
@@ -33,3 +37,4 @@ catena-vetus = { source = "catena_vetus/__main__.py", type = "onefile", bundle =
 
 [tool.poetry-pyinstaller-plugin.include]
 "catena_vetus/main.css" = "."
+
