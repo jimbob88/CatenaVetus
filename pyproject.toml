@@ -21,7 +21,8 @@ version = "2.0.0a1"
 
 [project.optional-dependencies]
 dev = [
-  "pytest"
+  "pytest",
+  "flake8"
 ]
 
 [tool.poetry-pyinstaller-plugin.scripts]
