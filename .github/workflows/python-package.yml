@@ -28,6 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           poetry self add poetry-pyinstaller-plugin
+          poetry install
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
