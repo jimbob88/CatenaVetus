@@ -67,7 +67,7 @@ The compiled software will be available under `./dist/`.
 ##### Running the tests
 
 ```console
-poetry run test
+poetry run pytest
 ```
 
 ##### Running the tests (classical)
