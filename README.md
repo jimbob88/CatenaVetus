@@ -5,6 +5,8 @@ connection. This software is best used with a mouse, if you intend to use the ta
 
 ### [Gallery](https://imgur.com/a/KA3IkJV)
 
+[![asciicast of John 3:16](https://asciinema.org/a/KXP76xX1flDNh0uOlAvXaOaLQ.svg)](https://asciinema.org/a/KXP76xX1flDNh0uOlAvXaOaLQ)
+
 ![Commentaries on John 3:16](https://i.imgur.com/KkwDODE.png)
 
 ![Screenshot showing the use of the table of contents](https://i.imgur.com/kqmMtNB.png)
