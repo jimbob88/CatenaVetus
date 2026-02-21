@@ -32,7 +32,6 @@ jobs:
         uses: snok/install-poetry@v1
       - name: Install dependencies
         run: |
-          poetry self add poetry-pyinstaller-plugin
           poetry install --with dev
       - name: Lint with flake8
         run: |

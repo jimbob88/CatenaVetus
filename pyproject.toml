@@ -30,8 +30,11 @@ flake8 = "^7.3.0"
 pytest = "^8.4.1"
 pyinstaller = "^6.19.0"
 
-[tool.poetry-pyinstaller-plugin.scripts]
-catena-vetus = { source = "catena_vetus/__main__.py", type = "onefile", bundle = false, hiddenimport = ["textual.widgets._markdown_viewer"] }
+[tool.poetry.requires-plugins]
+poetry-pyinstaller-plugin = { version = ">=2.0.0,<3.0.0" }
+
+[tool.poetry-pyinstaller-plugin.targets]
+catena-vetus = { source = "catena_vetus/__main__.py", type = "onefile", bundle = false, hidden-import = ["textual.widgets._markdown_viewer", "rich._unicode_data.unicode17-0-0"] }
 
 [tool.poetry-pyinstaller-plugin.package]
 "README.md" = "."
