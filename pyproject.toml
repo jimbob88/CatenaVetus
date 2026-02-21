@@ -16,7 +16,7 @@ dynamic = ["version"]
 dependencies = [
   "textual>=3.5.0"
 ]
-requires-python = ">=3.9,<4.0.0"
+requires-python = ">=3.9,<3.15"
 version = "2.0.0"
 
 [project.optional-dependencies]
@@ -28,6 +28,7 @@ dev = [
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.3.0"
 pytest = "^8.4.1"
+pyinstaller = "^6.19.0"
 
 [tool.poetry-pyinstaller-plugin.scripts]
 catena-vetus = { source = "catena_vetus/__main__.py", type = "onefile", bundle = false, hiddenimport = ["textual.widgets._markdown_viewer"] }
