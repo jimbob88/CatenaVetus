@@ -16,7 +16,7 @@ dynamic = ["version"]
 dependencies = [
   "textual>=3.5.0"
 ]
-requires-python = ">=3.9,<3.15"
+requires-python = ">=3.10,<3.15"
 version = "2.0.0"
 
 [project.optional-dependencies]
@@ -27,7 +27,7 @@ dev = [
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.3.0"
-pytest = "^8.4.1"
+pytest = "^9.0.2"
 pyinstaller = "^6.19.0"
 
 [tool.poetry.requires-plugins]
