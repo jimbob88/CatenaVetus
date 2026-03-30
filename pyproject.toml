@@ -14,15 +14,15 @@ readme = "README.md"
 license = "Unlicense"
 dynamic = ["version"]
 dependencies = [
-  "textual>=3.5.0"
+  "textual (>=8.2.1)"
 ]
 requires-python = ">=3.10,<3.15"
 version = "2.0.0"
 
 [project.optional-dependencies]
 dev = [
-  "pytest",
-  "flake8"
+  "pytest (>=9.0.2,<10.0.0)",
+  "flake8 (>=7.3.0,<8.0.0)"
 ]
 
 [tool.poetry.group.dev.dependencies]
