@@ -401,14 +401,14 @@ type = ["importlib_metadata (>=7.0.2) ; python_version < \"3.10\"", "jaraco.deve
 
 [[package]]
 name = "textual"
-version = "8.2.6"
+version = "8.2.7"
 description = "Modern Text User Interface framework"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "textual-8.2.6-py3-none-any.whl", hash = "sha256:17c92bec7ff1617bd7db2a3d9734b0c3b7d2c274c67d5eba94371ea2f99a63fd"},
-    {file = "textual-8.2.6.tar.gz", hash = "sha256:cef3714498a120a99278b98d4c165c278844e73db50f1db039aaabd89f2d1b63"},
+    {file = "textual-8.2.7-py3-none-any.whl", hash = "sha256:4caaa13a90bc4cf9c6c862c067ccd34fe84e9c161710a2a907a8026313b6bd73"},
+    {file = "textual-8.2.7.tar.gz", hash = "sha256:658f568ff81e30ed43890c3e07520390e5cf1b4763822006e060656b0a88f105"},
 ]
 
 [package.dependencies]
@@ -514,4 +514,4 @@ dev = ["flake8", "pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.15"
-content-hash = "d2baeca376467c60b441c476b62ee52da33a74fa1199d43dafe6dfde80e76405"
+content-hash = "8ff262455b1d0d2796de19cbdd88a4da2d0bcf75925e3c90b49180420077658a"
