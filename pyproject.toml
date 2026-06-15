@@ -27,7 +27,7 @@ dev = [
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.3.0"
-pytest = "^9.0.3"
+pytest = "^9.1.0"
 pyinstaller = "^6.20.0"
 
 [tool.poetry.requires-plugins]
